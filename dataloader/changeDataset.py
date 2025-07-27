@@ -67,7 +67,10 @@ class ChangeDataset(data.Dataset):
 
     @staticmethod
     def _open_image(filepath, mode=cv2.IMREAD_COLOR, dtype=None):
-        img = np.array(cv2.imread(filepath, mode), dtype=dtype)
+        img = cv2.imread(filepath, mode)
+        if img is None:
+            raise FileNotFoundError(f"Image file {filepath} not found or failed to load.")
+        img = np.array(img, dtype=dtype)
         return img
 
     @staticmethod

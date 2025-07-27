@@ -18,14 +18,14 @@ C.abs_dir = osp.realpath(".")
 
 # Dataset config
 """Dataset Path"""
-C.dataset_name = 'CDD'
-C.root_folder = '/home/morning-light/下载/CDD'
-C.A_format = '.jpg'
-C.B_format = '.jpg'
-C.gt_format = '.jpg'
+C.dataset_name = 'SYSU'
+C.root_folder = '/home/morning-light/SYSU-CD'
+C.A_format = '.png'
+C.B_format = '.png'
+C.gt_format = '.png'
 C.is_test = False
-C.num_train_imgs = 10000
-C.num_eval_imgs = 2999
+C.num_train_imgs = 7120
+C.num_eval_imgs = 1024
 C.num_classes = 2
 C.class_names =  ['background', 'change']
 
@@ -48,8 +48,8 @@ C.lr = 6e-5
 C.lr_power = 0.9
 C.momentum = 0.9
 C.weight_decay = 0.01
-C.batch_size = 8
-C.nepochs = 500
+C.batch_size = 4
+C.nepochs = 150
 C.niters_per_epoch = C.num_train_imgs // C.batch_size  + 1
 C.num_workers = 16
 C.train_scale_array = [1]
@@ -77,7 +77,7 @@ def add_path(path):
         sys.path.insert(0, path)
 add_path(osp.join(C.root_dir))
 
-C.log_dir = osp.abspath('log_final/log_CDD/' + 'log_' + C.dataset_name + '_' + C.backbone + '_' + 'conmb_cvssdecoder')
+C.log_dir = osp.abspath('log_final/log_SYSU/' + 'log_' + C.dataset_name + '_' + C.backbone + '_' + 'conmb_cvssdecoder')
 C.tb_dir = osp.abspath(osp.join(C.log_dir, "tb"))
 C.log_dir_link = C.log_dir
 C.checkpoint_dir = osp.abspath(osp.join(C.log_dir, "checkpoint"))

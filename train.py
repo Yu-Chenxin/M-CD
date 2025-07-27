@@ -48,6 +48,8 @@ with Engine(custom_parser=parser) as engine:
         from configs.config_cdd import config
     elif dataset_name == 'levir':
         from configs.config_levir import config
+    elif dataset_name == 'sysu':
+        from configs.config_sysu import config
     else:
         raise ValueError('Not a valid dataset name')
 

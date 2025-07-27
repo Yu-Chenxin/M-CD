@@ -1,0 +1,20 @@
+Trian:
+    For LEVIR datasets:
+        CUDA_VISIBLE_DEVICES="0" torchrun -m --nproc_per_node=1 train.py -p 29501 -d 0 -n "sysu" 
+
+    For CDD datasets:
+        
+
+
+
+
+
+
+
+Evaluation
+
+    For LEVIR datasets:
+        CUDA_VISIBLE_DEVICES="0" python eval.py -d="0" -n "levir" -e="/home/morning-light/M-CD/levir.pth" -p="visualize_savedir"
+
+    For CDD datasets:
+        CUDA_VISIBLE_DEVICES="0" python eval.py -d="0" -n "cdd" -e="/home/morning-light/M-CD/cdd.pth" -p="visualize_savedir"

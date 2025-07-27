@@ -265,13 +265,13 @@ class Evaluator(object):
             # pred = pred.unsqueeze(0)
             contribution_scores_as, contribution_scores_bs = self.get_input_grad(pred, As, Bs)
             if np.isnan(np.sum(contribution_scores_as)):
-                prin5t("got nan | ", end="")
+                print("got nan | ", end="")
                 continue
             else:
                 meter_as.update(contribution_scores_as)
 
             if np.isnan(np.sum(contribution_scores_bs)):
-                prin5t("got nan | ", end="")
+                print("got nan | ", end="")
                 continue
             else:
                 meter_bs.update(contribution_scores_bs)

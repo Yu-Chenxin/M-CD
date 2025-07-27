@@ -30,26 +30,55 @@ class SegEvaluator(Evaluator):
 
         if self.save_path is not None:
             ensure_dir(self.save_path)
-            ensure_dir(self.save_path+'_color')
 
             fn = name + '.png'
 
-            # save colored result
             result_img = Image.fromarray(pred.astype(np.uint8)*255, mode='P')
-            # result_img = Image.fromarray(pred.astype(np.uint8), mode='P')
-            # class_colors = self.dataset.get_class_colors()
-            # palette_list = list(np.array(class_colors).flat)
-            # if len(palette_list) < 768:
-            #     palette_list += [0] * (768 - len(palette_list))
-            # result_img.putpalette(palette_list)
-            result_img.save(os.path.join(self.save_path+'_color', fn))
+            # 将 PIL 图像转换为 OpenCV 处理的 NumPy 数组
+            pred_np = np.array(result_img)
+
+            # 降噪处理：使用中值滤波
+            pred_denoised = cv2.medianBlur(pred_np, ksize=3)  # ksize 是滤波核大小，一般为 3 或 5
+
+            # 在二值掩码中查找轮廓
+            contours, _ = cv2.findContours(pred_denoised, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+            # 如果 Bs 是 PIL 图像，则将其转换为 NumPy 数组
+            IMG = Bs
+            if isinstance(IMG, Image.Image):
+                Bs_np = np.array(IMG)
+            else:
+                Bs_np = IMG
+
+            # 在 Bs 图像上绘制轮廓
+            cv2.drawContours(Bs_np, contours, -1, (0, 0, 255), thickness=2)  # Red color with thickness 2
+
+            # 保存带有轮廓的 Bs 图像
+            bs_with_contours_path ="./Bs_with_contours"
+            ensure_dir(bs_with_contours_path)
+            cv2.imwrite(os.path.join(bs_with_contours_path, fn), Bs_np)
+
 
             # save raw result
-            cv2.imwrite(os.path.join(self.save_path, fn), pred)
+            colormap = np.zeros((256, 1, 3), dtype=np.uint8)
+            for i in range(256):
+                colormap[i, 0, 0] = i  # Blue channel
+                colormap[i, 0, 1] = i  # Green channel
+                colormap[i, 0, 2] = i  # Red channel
+
+            pred_fix = cv2.applyColorMap((pred * 255).astype(np.uint8), colormap)#cv2.COLORMAP_JET
+            cv2.imwrite(os.path.join(self.save_path, fn), pred_fix)
             logger.info('Save the image ' + fn)
 
         if self.show_image:
             colors = self.dataset.get_class_colors()
+            if 'img' in data:
+                img = data['img']
+            else:
+                if isinstance(Bs, Image.Image):
+                    img = np.array(Bs)
+                else:
+                    img = Bs
             image = img
             clean = np.zeros(label.shape)
             comp_img = show_img(colors, config.background, image, clean,
@@ -99,6 +128,8 @@ if __name__ == "__main__":
         from configs.config_whu import config
     elif dataset_name == 'cdd':
         from configs.config_cdd import config
+    elif dataset_name == 'sysu':
+        from configs.config_sysu import config
     else:
         raise ValueError('Not a valid dataset name')
 
@@ -106,7 +137,7 @@ if __name__ == "__main__":
     flops = network.flops()
     print("Gflops of the network: ", flops/(10**9))
     print("number of paramters: ", sum(p.numel() if p.requires_grad==True else 0 for p in network.parameters()))
-    1/0
+    # 1/0
     data_setting = {'root': config.root_folder,
                     'A_format': config.A_format,
                     'B_format': config.B_format,

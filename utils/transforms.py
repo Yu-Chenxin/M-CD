@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import numbers
 import random
-import collections
+import collections.abc as collections
 
 
 def get_2dshape(shape, *, zero=True):

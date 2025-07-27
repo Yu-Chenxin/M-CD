@@ -18,8 +18,8 @@ C.abs_dir = osp.realpath(".")
 
 # Dataset config
 """Dataset Path"""
-C.dataset_name = 'LEVIR'
-C.root_folder = '/mnt/store/jparanj1/LEVIR-CD256'
+C.dataset_name = 'LIVER'
+C.root_folder = '/home/morning-light/LEVIR-CD256'
 C.A_format = '.png'
 C.B_format = '.png'
 C.gt_format = '.png'
@@ -37,7 +37,7 @@ C.norm_mean = np.array([0.485, 0.456, 0.406])
 C.norm_std = np.array([0.229, 0.224, 0.225])
 
 """ Settings for network, this would be different for each kind of model"""
-C.backbone = 'sigma_small' # sigma_tiny / sigma_small / sigma_base
+C.backbone = 'sigma_base' # sigma_tiny / sigma_small / sigma_base
 C.pretrained_model = None # do not need to change
 C.decoder = 'MambaDecoder' # 'MLPDecoder'
 C.decoder_embed_dim = 512
@@ -48,7 +48,7 @@ C.lr = 6e-5
 C.lr_power = 0.9
 C.momentum = 0.9
 C.weight_decay = 0.01
-C.batch_size = 8
+C.batch_size = 3
 C.nepochs = 150
 C.niters_per_epoch = C.num_train_imgs // C.batch_size  + 1
 C.num_workers = 16
